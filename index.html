@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mini Ecommerce</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" 
+    integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+    <style>
+        .card img {
+            object-fit: cover;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #6f42c1;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #5a379d;
+        }
+        footer {
+            margin-top: 20px;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        footer a {
+            text-decoration: none;
+            color: #6f42c1;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand">Mini Ecommerce</a>
+            <form class="form-inline" id="formItem">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" id="keyword" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchItem">Search</button>
+            </form>
+            <button class="btn btn-primary" id="cart"><i class="fas fa-shopping-cart"></i> (<span id="cartCount">0</span>)</button>
+        </nav>
+        <div class="row">
+            <div class="row col-md-12 mt-2" id="listBarang"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <i class="fab fa-instagram"></i> 
+            <a href="https://www.instagram.com/fya.keel" target="_blank">fya.keel</a> | 
+            <i class="fas fa-envelope"></i> 
+            <a href="mailto:alyahardiyantifadilah@gmail.com">alyahardiyantifadilah@gmail.com</a> | 
+            <i class="fab fa-github"></i> 
+            <a href="https://github.com/Fadyaa29" target="_blank">Fadyaa29</a>
+        </p>
+    </footer>
+    
+    <script>
+        const items = [
+            ['001', 'GAMAKAY K66 Keyboard', 650000, 'Keyboard mekanik yang ideal untuk gaming dan mengetik, dilengkapi dengan lampu RGB dan desain compact.', 'GAMAKAY K66.JPG'], 
+            ['002', 'AULA F99 Pro Keyboard', 1500000, 'Keyboard mekanik 100 kunci tri-mode dengan hot-swappable, baterai 8000mAh, keycap PBT dua warna, dan lampu RGB. Ideal untuk gaming dan pekerjaan profesional.', 'AULA F99 Pro Keyboard.jpg'],
+            ['003', 'Rexus QB200 Mouse', 250000, 'Mouse wireless Bluetooth untuk kantor, ergonomis dan kompatibel dengan berbagai perangkat.', 'Rexus QB200 Mouse.jpg'],
+            ['004', 'Viqoo Dual-mode Wireless Mouse', 300000, 'Mouse wireless dual-mode (2.4G dan Bluetooth), rechargeable, silent click, slim design. Cocok untuk PC, Laptop, Android, dan iOS.', 'Viqoo Dual-mode Wireless Mouse.jpg'],
+        ];
+
+        const listBarang = document.getElementById('listBarang');
+        const keyword = document.getElementById('keyword');
+        const cart = document.getElementById('cart');
+        const cartCount = document.getElementById('cartCount');
+        let cartItems = [];
+
+        function renderItems(itemsToRender) {
+            listBarang.innerHTML = '';
+            itemsToRender.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mt-2';
+                card.innerHTML = `
+                    <div class="card" style="width: 18rem;">
+                        <img src="${item[4]}" class="card-img-top" height="200px" alt="${item[1]}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item[1]}</h5>
+                            <p class="card-text">${item[3]}</p>
+                            <p class="card-text"><strong>Rp ${item[2].toLocaleString('id-ID')}</strong></p>
+                            <button class="btn btn-primary add-cart-btn" data-id="${item[0]}">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                listBarang.appendChild(card);
+            });
+
+            document.querySelectorAll('.add-cart-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = button.getAttribute('data-id');
+                    addToCart(id);
+                });
+            });
+        }
+
+        function addToCart(id) {
+            const item = items.find(item => item[0] === id);
+            if (item) {
+                cartItems.push(item);
+                cartCount.textContent = cartItems.length;
+                alert(`${item[1]} berhasil ditambahkan ke keranjang!`);
+            }
+        }
+
+        document.getElementById('formItem').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchTerm = keyword.value.toLowerCase();
+            const filteredItems = items.filter(item =>
+                item[1].toLowerCase().includes(searchTerm) || item[3].toLowerCase().includes(searchTerm)
+            );
+            renderItems(filteredItems);
+        });
+
+        renderItems(items);
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
